@@ -1,3 +1,3 @@
 # Various-Projects
 
-Various and random projects I made out of my free time to better undertanding coding 
+Various projects I made out of my free time to better undertanding software design and coding to real life business applications  
