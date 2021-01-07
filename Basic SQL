@@ -1,0 +1,38 @@
+/* Create a table */
+/*SQL:
+- select-from-where
+- order-bys
+- joins
+- inserts, updates, deletes
+- aggregates
+- group-bys
+- subqueries
+- views
+- functions*/
+
+/*meta select*/
+SELECT * FROM customer;
+
+/*SELECT, FROM, WHERE*/
+SELECT name, address, state 
+FROM customer
+WHERE name = "Bill Smith"; 
+
+/*create a table called sad*/
+CREATE TABLE sad (
+    id INTEGER,
+    name TEXT
+    );
+
+/*Insert into Table*/  
+INSERT INTO sad (id, name)
+VALUES (123456, "Jehysun Oh");
+INSERT INTO sad (id, name)
+VALUES (654321, "Jesun Oh");
+
+/*simple query*/  
+SELECT name 
+FROM sad
+WHERE id = 123456
+ORDER BY id
+;
