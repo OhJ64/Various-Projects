@@ -24,21 +24,21 @@ while keepGoing != False:
         if(comp == "scissor"):
             print("nice job, you won. comp chose", comp)
         else:
-            print("damn son, you lost, computer chose", comp)
+            print("son, you lost, computer chose", comp)
             
     #user inputs an option of scissor and comp outcome
     elif(choice == "scissor"):
         if(comp == "paper"):
              print("nice job, you won. comp chose", comp)
         else:
-            print("damn son, you lost, computer chose", comp)
+            print("son, you lost, computer chose", comp)
 
     #user inputs an option of paper and comp outcome
     elif(choice == "paper"):
         if(comp == "rock"):
              print("nice job, you won. comp chose", comp)
         else:
-            print("damn son, you lost, computer chose", comp)
+            print("son, you lost, computer chose", comp)
 
     #if user puts in something other than the 3 choices 
     else:
