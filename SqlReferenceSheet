@@ -30,6 +30,9 @@ VALUES (123456, "Jehysun Oh");
 INSERT INTO sad (id, name)
 VALUES (654321, "Jesun Oh");
 
+DROP TABLE sad;
+
+
 /*simple query*/  
 SELECT name 
 FROM sad
@@ -45,8 +48,30 @@ LEFT JOIN Address
 ON Person.PersonId = Address.PersonId;
 
 
+C. Aggregate Functions
+AVG() returns the average value for a numeric column.
+SELECT AVG(column_name)
+FROM table_name;
 
+SUM() returns the sum of all the values in a column.
+SELECT SUM(column_name)
+FROM table_name;
 
+ROUND() rounds the values in the column to the number of decimal places specified by the integer.
+SELECT ROUND(column_name, integer)
+FROM table_name;
+
+MAX() returns the largest value in a column.
+SELECT MAX(column_name)
+FROM table_name;
+
+MIN() returns the smallest value in a column.
+SELECT MIN(column_name)
+FROM table_name;
+
+COUNT() counts the number of rows where the column is not NULL.
+SELECT COUNT(column_name)
+FROM table_name;
 
 
 
