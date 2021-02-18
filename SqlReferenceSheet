@@ -41,8 +41,27 @@ ORDER BY id
 ;
 
 
-/*Using a Left Join*//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-SELECT Person.FirstName, Person.LastName, Address.City, Address.State
+
+
+/Types of Joins*//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+● Inner Join - a join between tables such that the join will only return matched rows between two
+tables.
+
+● Outer Join - a join between tables such that the join will return matched rows between two
+tables, in addition to other rows in some tables, depending on the type of join
+
+○ Left Outer Join - this outer join will return rows that match between two tables, and also
+all rows from the table in the FROM clause
+
+○ Right Outer Join - this outer join will return rows that match between two tables, and
+also all rows from the table in the JOIN clause
+
+○ Full Outer Join - this outer join will return all matched rows, along with all other rows in
+either table.
+
+
+
+/*Using a Left Join*/////
 FROM Person
 LEFT JOIN Address
 ON Person.PersonId = Address.PersonId;
