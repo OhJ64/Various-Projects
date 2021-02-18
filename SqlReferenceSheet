@@ -27,8 +27,16 @@ CREATE TABLE sad (
 /*Insert into Table*//////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 INSERT INTO sad (id, name)
 VALUES (123456, "Jehysun Oh");
-INSERT INTO sad (id, name)
-VALUES (654321, "Jesun Oh");
+
+
+/*Update Table*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+UPDATE sad 
+SET id = 54321, name = "Jason"
+where id = 123456
+
+/*dELETe*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+DELETE FROM sad 
+WHERE name = "Jason"
 
 DROP TABLE sad;
 
@@ -58,7 +66,6 @@ also all rows from the table in the JOIN clause
 
 ○ Full Outer Join - this outer join will return all matched rows, along with all other rows in
 either table.
-
 
 
 /*Using a Left Join*/////
