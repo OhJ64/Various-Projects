@@ -102,4 +102,27 @@ SELECT COUNT(column_name)
 FROM table_name;
 
 
+/*Views*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+– virtual table based on result set of SQL statement 
+
+CREATE VIEW [Brazil Customers] AS
+SELECT CustomerName, ContactName
+FROM Customers
+
+CREATE VIEW [Products Above Average Price] AS
+SELECT ProductName, Price
+FROM Products
+WHERE Price > (SELECT AVG(Price) FROM Products);
+
+DROP VIEW [Brazil Customers];
+WHERE Country = 'Brazil';
+
+
+/*Subqueries*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Inner/nested query is a query within another query within the WHERE clause, used to further restrict data in main query. – Use Parenthesis to show subquery
+SELECT * 
+FROM CUSTOMERS 
+WHERE ID IN (SELECT ID 
+      FROM CUSTOMERS 
+      WHERE SALARY > 4500) ;
 
