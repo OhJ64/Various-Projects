@@ -18,6 +18,9 @@ width = 60
 height = 60
 velocity = 25
 
+isJump = False
+jumpCount = 10
+
 run = True
 
 while run:
@@ -36,10 +39,29 @@ while run:
         x = x - velocity
     if control[pygame.K_RIGHT] and x < 500 - width - velocity:
         x = x + velocity
-    if control[pygame.K_UP] and y > velocity:
-        y = y - velocity
-    if control[pygame.K_DOWN] and y < 500 - height - velocity:
-        y = y + velocity
+
+    #don't allow player to jump again if already jump
+    if not(isJump):
+        if control[pygame.K_UP] and y > velocity:
+            y = y - velocity
+        if control[pygame.K_DOWN] and y < 500 - height - velocity:
+            y = y + velocity
+
+        if control[pygame.K_SPACE]:
+            isJump = True
+       
+
+    else:
+        if jumpCount >= -10:
+            neg = 1
+            if jumpCount < 0:
+                neg = -1
+            y = y - (jumpCount ** 2) * .5 * neg
+            jumpCount = jumpCount - 1
+
+        else:
+            isJump = False
+            jumpCount = 10
 
     #sets the background so that square doesn't leave a trail
     win.fill((0,0,0))
