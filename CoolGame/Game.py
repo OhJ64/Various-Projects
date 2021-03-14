@@ -1,3 +1,4 @@
+
 # Import and initialize the pygame library
 import pygame
 import queue
@@ -68,10 +69,10 @@ class projectile(object):
         self.radius = radius
         self.color = color
         self.facing = facing
-        self.vel = 8 * facing
+        self.velocity = 12 * facing
 
     #method under projectile class that draws the actual bullet
-    def draw(win):
+    def draw(self,win):
         pygame.draw.circle(win, self.color, (self.x,self.y), self.radius)
 
         
@@ -87,6 +88,8 @@ def redrawGameWindow():
     #put in the background
     win.blit(bg, (0,0))
     man.draw(win)
+    for bullet in bullets:
+        bullet.draw(win)
     pygame.display.update()
 
 
@@ -101,9 +104,24 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-    
+
+    for bullet in bullets:
+        if bullet.x < 500 and bullet.x > 0:
+            bullet.x = bullet.x + bullet.velocity
+
+        else:
+            bullets.pop(bullets.index(bullet))
+        
     #keeps track of all keys moving input
     control = pygame.key.get_pressed()
+
+    if control[pygame.K_SPACE]:
+        if man.left:
+            facing = -1
+        else:
+            facing = 1
+        if len(bullets) < 5:
+             bullets.append(projectile(round(man.x + man.width //2), round(man.y + man.height//2), 6, (0,0,0), facing))
 
     #change velocity so you change one variable instead of 4
     #dont want left and up, to go past velocity, right and down shouldn't go past left/down edge of rect
@@ -126,7 +144,7 @@ while run:
     #don't allow player to jump again if already jump
     if not(man.isJump):
 
-        if control[pygame.K_SPACE]:
+        if control[pygame.K_UP]:
             man.isJump = True
             man.right = False
             man.left = False
@@ -151,4 +169,3 @@ while run:
     redrawGameWindow()
 # Done! Time to quit.
 pygame.quit()
-
