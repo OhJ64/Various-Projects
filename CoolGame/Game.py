@@ -1,4 +1,3 @@
-
 # Import and initialize the pygame library
 import pygame
 import queue
@@ -22,8 +21,11 @@ walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'),\
             pygame.image.load('L5.png'), pygame.image.load('L6.png'), \
             pygame.image.load('L7.png'),\
             pygame.image.load('L8.png'), pygame.image.load('L9.png')]
-bg = pygame.image.load('bg.jpg')
+bg = pygame.image.load('flap.png')
 char = pygame.image.load('standing.png')
+
+#change fps of game
+clock = pygame.time.Clock()
 
 
 #create a class for player object
@@ -33,7 +35,7 @@ class player(object):
         self.y = y
         self.width = width
         self.height = height
-        self.velocity = 15
+        self.velocity = 10
         self.isJump = False
         self.jumpCount = 10
         self.left = False
@@ -69,33 +71,87 @@ class projectile(object):
         self.radius = radius
         self.color = color
         self.facing = facing
-        self.velocity = 12 * facing
+        self.velocity = 8 * facing
 
     #method under projectile class that draws the actual bullet
     def draw(self,win):
         pygame.draw.circle(win, self.color, (self.x,self.y), self.radius)
 
+#create a class for goblin object
+class enemy(object):
+    walkRight = [pygame.image.load('R1E.png'), pygame.image.load('R2E.png'),\
+                 pygame.image.load('R3E.png'), pygame.image.load('R4E.png'),\
+                 pygame.image.load('R5E.png'), pygame.image.load('R6E.png'),\
+                 pygame.image.load('R7E.png'), pygame.image.load('R8E.png'),\
+                 pygame.image.load('R9E.png'), pygame.image.load('R10E.png'),\
+                 pygame.image.load('R11E.png')]
+    walkLeft = [pygame.image.load('L1E.png'), pygame.image.load('L2E.png'),\
+                pygame.image.load('L3E.png'), pygame.image.load('L4E.png'),\
+                pygame.image.load('L5E.png'), pygame.image.load('L6E.png'),\
+                pygame.image.load('L7E.png'), pygame.image.load('L8E.png'),\
+                pygame.image.load('L9E.png'), pygame.image.load('L10E.png'),\
+                pygame.image.load('L11E.png')]
+    
+    def __init__(self, x, y, width, height, end):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.path = [x, end]
+        self.walkCount = 0
+        self.vel = 3
+
+    def draw(self,win):
+        self.move()
+        if self.walkCount +1 <= 33:
+            self.walkCount = 0
+
+        if self.vel > 0:
+            win.blit(self.walkRight[self.walkCount//3], (self.x, self.y))
+            self.walkCount += 1
+        else:
+            win.blit(self.walkLeft[self.walkCount//3], (self.x, self.y))
+            self.walkCount += 1
+            
+            
+
+    def move(self):
+        if self.vel > 0:
+            if self.x + self.vel < self.path[1]:
+                self.x += self.vel
+            else:
+                self.vel = self.vel*-1
+                self.x += self.vel
+                self.walkCount = 0
+
+        else:
+            if self.x - self.vel > self.path[0]:
+                self.x += self.vel
+            else:
+                self.vel = self.vel * -1
+                self.x += self.vel
+                self.walkCount = 0
         
-#change fps of game
-clock = pygame.time.Clock()
+#draw background function
+def redrawGameWindow():
+    win.blit(bg, (0,0))
+    man.draw(win)
+    goblin.draw(win)
+    for bullet in bullets:
+        bullet.draw(win)
+
+    pygame.display.update()
+
+
 
 #set window size
 win = pygame.display.set_mode((500,469))
 
 
-#draw background function
-def redrawGameWindow():
-    #put in the background
-    win.blit(bg, (0,0))
-    man.draw(win)
-    for bullet in bullets:
-        bullet.draw(win)
-    pygame.display.update()
-
-
 #main program
 man = player(300,400,64,64)
 bullets = []
+goblin = enemy(100,410,64,64,300)
 run = True
 while run:
     clock.tick(27)
@@ -169,3 +225,4 @@ while run:
     redrawGameWindow()
 # Done! Time to quit.
 pygame.quit()
+
