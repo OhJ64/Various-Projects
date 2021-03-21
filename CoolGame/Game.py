@@ -21,11 +21,19 @@ walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'),\
             pygame.image.load('L5.png'), pygame.image.load('L6.png'), \
             pygame.image.load('L7.png'),\
             pygame.image.load('L8.png'), pygame.image.load('L9.png')]
-bg = pygame.image.load('flap.png')
+bg = pygame.image.load('bak.png')
 char = pygame.image.load('standing.png')
 
 #change fps of game
 clock = pygame.time.Clock()
+
+#music sound track
+music = pygame.mixer.music.load('creep.mp3')
+pygame.mixer.music.play(-1)
+
+#bullet sound effect and hit sound effect
+bulletSound = pygame.mixer.Sound('bullet.wav')
+hitSound = pygame.mixer.Sound('hit.wav')
 
 score = 0
 #create a class for player object
@@ -154,7 +162,7 @@ class enemy(object):
 #draw background function
 def redrawGameWindow():
     win.blit(bg, (0,0))
-    text = font.render('Score: ' + str(score), 1, (0,0,0))
+    text = font.render('Score: ' + str(score), 1, (255,255,255))
     win.blit(text, (390,10))
     man.draw(win)
     goblin.draw(win)
@@ -166,15 +174,15 @@ def redrawGameWindow():
 
 
 #set window size
-win = pygame.display.set_mode((500,469))
+win = pygame.display.set_mode((500,460))
 
 
 #main program
 
 font = pygame.font.SysFont('comicsans', 30, True, True)
-man = player(300,400,64,64)
+man = player(300,390,64,64)
 bullets = []
-goblin = enemy(100,410,64,64,300)
+goblin = enemy(100,395,64,64,300)
 shootLoop = 0
 run = True
 while run:
@@ -196,6 +204,7 @@ while run:
         #and and after checks if we are above the top of the rectangle of the goblin. 
         if bullet.y - bullet.radius < goblin.hitbox[1] + goblin.hitbox[3] and bullet.y + bullet.radius > goblin.hitbox[1]:
             if bullet.x + bullet.radius > goblin.hitbox[0] and bullet.x - bullet.radius < goblin.hitbox[0] + goblin.hitbox[2]:
+                hitSound.play()
                 goblin.hit()
                 score+=1
                 bullets.pop(bullets.index(bullet))
@@ -211,12 +220,13 @@ while run:
 
     #can only shoot after 3 are shot
     if control[pygame.K_SPACE] and shootLoop == 0:
+        bulletSound.play()
         if man.left:
             facing = -1
         else:
             facing = 1
         if len(bullets) < 5:
-             bullets.append(projectile(round(man.x + man.width //2), round(man.y + man.height//2), 6, (0,0,0), facing))
+             bullets.append(projectile(round(man.x + man.width //2), round(man.y + man.height//2), 6, (255,160,0), facing))
 
         shootLoop = 1
 
