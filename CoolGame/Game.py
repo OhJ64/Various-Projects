@@ -42,6 +42,7 @@ class player(object):
         self.right = False
         self.walkCount = 0
         self.standing = True
+        self.hitbox = (self.x + 17, self.y + 11, 29,52)
 
     #method for making man walk under class player
     def draw(self,win):
@@ -57,11 +58,14 @@ class player(object):
                 win.blit(walkRight[self.walkCount//3], (self.x,self.y))
 
         #if character is standing to the right or left, look in the direction
+        #everytime we draw the character, we move the hitbox with it
         else:
             if self.right:
                 win.blit(walkRight[0], (self.x, self.y))
             else:
                 win.blit(walkLeft[0], (self.x, self.y))
+        self.hitbox = (self.x + 20, self.y, 28,60)
+        pygame.draw.rect(win, (255,0,0), self.hitbox, 2)
 
 #create a class for bullet projectile
 class projectile(object):
@@ -71,7 +75,7 @@ class projectile(object):
         self.radius = radius
         self.color = color
         self.facing = facing
-        self.velocity = 8 * facing
+        self.velocity = 10 * facing
 
     #method under projectile class that draws the actual bullet
     def draw(self,win):
@@ -99,7 +103,8 @@ class enemy(object):
         self.height = height
         self.path = [x, end]
         self.walkCount = 0
-        self.vel = 3
+        self.vel = 5
+        self.hitbox = (self.x + 17, self.y+2, 31,57)
 
     def draw(self,win):
         self.move()
@@ -112,6 +117,8 @@ class enemy(object):
         else:
             win.blit(self.walkLeft[self.walkCount//3], (self.x, self.y))
             self.walkCount += 1
+        self.hitbox = (self.x + 20, self.y, 28,60)
+        pygame.draw.rect(win, (255,0,0), self.hitbox, 2)
             
             
 
@@ -131,7 +138,9 @@ class enemy(object):
                 self.vel = self.vel * -1
                 self.x += self.vel
                 self.walkCount = 0
-        
+                
+    def hit(self):
+        print("fugg")
 #draw background function
 def redrawGameWindow():
     win.blit(bg, (0,0))
@@ -152,9 +161,16 @@ win = pygame.display.set_mode((500,469))
 man = player(300,400,64,64)
 bullets = []
 goblin = enemy(100,410,64,64,300)
+shootLoop = 0
 run = True
 while run:
     clock.tick(27)
+
+    #only fire up to 3 bullets 1 at a time
+    if shootLoop > 0:
+        shootLoop += 1
+    if shootLoop > 3:
+        shootLoop = 0
 
     #get a list of all the events tgat happen
     for event in pygame.event.get():
@@ -162,6 +178,13 @@ while run:
             run = False
 
     for bullet in bullets:
+        #up to [3] checks to see if we are above bottom of rectangle of goblin,
+        #and and after checks if we are above the top of the rectangle of the goblin. 
+        if bullet.y - bullet.radius < goblin.hitbox[1] + goblin.hitbox[3] and bullet.y + bullet.radius > goblin.hitbox[1]:
+            if bullet.x + bullet.radius > goblin.hitbox[0] and bullet.x - bullet.radius < goblin.hitbox[0] + goblin.hitbox[2]:
+                goblin.hit()
+                bullets.pop(bullets.index(bullet))
+                
         if bullet.x < 500 and bullet.x > 0:
             bullet.x = bullet.x + bullet.velocity
 
@@ -171,13 +194,16 @@ while run:
     #keeps track of all keys moving input
     control = pygame.key.get_pressed()
 
-    if control[pygame.K_SPACE]:
+    #can only shoot after 3 are shot
+    if control[pygame.K_SPACE] and shootLoop == 0:
         if man.left:
             facing = -1
         else:
             facing = 1
         if len(bullets) < 5:
              bullets.append(projectile(round(man.x + man.width //2), round(man.y + man.height//2), 6, (0,0,0), facing))
+
+        shootLoop = 1
 
     #change velocity so you change one variable instead of 4
     #dont want left and up, to go past velocity, right and down shouldn't go past left/down edge of rect
