@@ -75,6 +75,29 @@ class player(object):
         self.hitbox = (self.x + 20, self.y, 28,60)
         #pygame.draw.rect(win, (255,0,0), self.hitbox, 2)
 
+    #subtract from score
+    def hit(self):
+        self.isJump = False
+        self.jumpCount = 10
+        self.x = 60
+        self.y = 390
+        self.walkCount = 0
+        font1 = pygame.font.SysFont('comicsans', 100)
+        text = font1.render('-5', 1, (255,0,0))
+        win.blit(text, (250 - (text.get_width()/2),200))
+        pygame.display.update()
+        i = 0
+        #delaying while loop by 10 seconds
+        #for loop lets us exit out of the game
+        while i < 300:
+            pygame.time.delay(7)
+            i+=1
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                        i = 301
+                        pygame.quit()
+            
+        
 #create a class for bullet projectile
 class projectile(object):
     def __init__(self,x,y,radius,color,facing):
@@ -159,6 +182,7 @@ class enemy(object):
         else:
             self.visible = False
         print("fugg")
+        
 #draw background function
 def redrawGameWindow():
     win.blit(bg, (0,0))
@@ -180,7 +204,7 @@ win = pygame.display.set_mode((500,460))
 #main program
 
 font = pygame.font.SysFont('comicsans', 30, True, True)
-man = player(300,390,64,64)
+man = player(300,350,64,64)
 bullets = []
 goblin = enemy(100,395,64,64,300)
 shootLoop = 0
@@ -188,6 +212,13 @@ run = True
 while run:
     clock.tick(27)
 
+    if goblin.visible == True:
+    #colision between goblin and man 
+        if man.hitbox[1] < goblin.hitbox[1] + goblin.hitbox[3] and man.hitbox[1] + man.hitbox[3] > goblin.hitbox[1]:
+            if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
+                man.hit()
+                score-=5
+        
     #only fire up to 3 bullets 1 at a time
     if shootLoop > 0:
         shootLoop += 1
