@@ -33,7 +33,7 @@ pygame.mixer.music.play(-1)
 
 #bullet sound effect and hit sound effect
 bulletSound = pygame.mixer.Sound('bullet.wav')
-hitSound = pygame.mixer.Sound('hit.wav')
+hitSound = pygame.mixer.Sound('oof.wav')
 
 score = 0
 #create a class for player object
@@ -198,17 +198,20 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-
+    
     for bullet in bullets:
         #up to [3] checks to see if we are above bottom of rectangle of goblin,
-        #and and after checks if we are above the top of the rectangle of the goblin. 
-        if bullet.y - bullet.radius < goblin.hitbox[1] + goblin.hitbox[3] and bullet.y + bullet.radius > goblin.hitbox[1]:
-            if bullet.x + bullet.radius > goblin.hitbox[0] and bullet.x - bullet.radius < goblin.hitbox[0] + goblin.hitbox[2]:
-                hitSound.play()
-                goblin.hit()
-                score+=1
-                bullets.pop(bullets.index(bullet))
-                
+        #and and after checks if we are above the top of the rectangle of the goblin.
+        #bullets will only hit the goblin if the goblin is visible on the screen
+        if goblin.visible:
+            if bullet.y - bullet.radius < goblin.hitbox[1] + goblin.hitbox[3] and bullet.y + bullet.radius > goblin.hitbox[1]:
+                if bullet.x + bullet.radius > goblin.hitbox[0] and bullet.x - bullet.radius < goblin.hitbox[0] + goblin.hitbox[2]:
+                    hitSound.play()
+                    goblin.hit()
+                    score+=1
+                    bullets.pop(bullets.index(bullet))
+
+        #shows the bullet going to the right and left when shot       
         if bullet.x < 500 and bullet.x > 0:
             bullet.x = bullet.x + bullet.velocity
 
@@ -276,4 +279,3 @@ while run:
     redrawGameWindow()
 # Done! Time to quit.
 pygame.quit()
-
