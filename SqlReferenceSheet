@@ -34,7 +34,7 @@ UPDATE sad
 SET id = 54321, name = "Jason"
 where id = 123456
 
-/*dELETe*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+/*DELETE*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 DELETE FROM sad 
 WHERE name = "Jason"
 
@@ -70,12 +70,12 @@ also all rows from the table in the JOIN clause
 either table.
 
 
-/*Using a Left Join*/////
+/*Using a Left Join* - returns all rows FROM clause and all rows that match/////
 FROM Person
 LEFT JOIN Address
 ON Person.PersonId = Address.PersonId;
 
-
+/*Using a right Join* - returns all rows from the join clause and all rows that match from the two tables/////
 SELECT Orders.OrderID, Employees.LastName, Employees.FirstName
 FROM Orders
 RIGHT JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID
@@ -125,6 +125,17 @@ DROP VIEW [Brazil Customers];
 WHERE Country = 'Brazil';
 
 
+create view [income] as
+select "Product line", round(sum("gross income"),0) as profit
+from hi
+group by "Product line"
+order by profit desc
+;
+
+select * from [income]
+;
+
+
 /*Subqueries*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Inner/nested query is a query within another query within the WHERE clause, used to further restrict data in main query. – Use Parenthesis to show subquery
 SELECT * 
@@ -132,4 +143,14 @@ FROM CUSTOMERS
 WHERE ID IN (SELECT ID 
       FROM CUSTOMERS 
       WHERE SALARY > 4500) ;
+      
+      
+select "Product line" as product, round(avg(cogs),2) as cost
+from hi 
+group by product
+having cost > 
+    (select avg(cogs)
+    from hi)
+order by cost desc
+;
 
