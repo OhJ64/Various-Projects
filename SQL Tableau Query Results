@@ -1,0 +1,49 @@
+SELECT "Product line",
+       round(sum("gross income"), 0) AS [Gross Income],
+       round(sum("Quantity"), 0) AS Quantity
+  FROM hi
+ GROUP BY "Product line"
+ ORDER BY "Gross Income" DESC;
+
+SELECT Gender,
+       count(Gender) AS [Gender Count]
+  FROM hi
+ GROUP BY Gender;
+
+;
+
+CREATE VIEW income AS
+    SELECT "Product line",
+           round(sum("gross income"), 0) AS profit
+      FROM hi
+     GROUP BY "Product line"
+     ORDER BY profit DESC;
+
+SELECT *
+  FROM income;
+
+SELECT "Customer type",
+       Gender,
+       count(Branch) AS [Branch Count]
+  FROM hi
+ WHERE Gender = (
+                    SELECT Gender
+                      FROM hi
+                     WHERE Gender = "Male"
+                )
+ GROUP BY "Customer type";
+
+SELECT "Product line",
+       round(sum("gross income"), 0) AS [Gross Income],
+       count("Customer type") AS [Customer Count]
+  FROM hi
+ WHERE City = (
+                  SELECT City
+                    FROM hi
+                   WHERE "Customer type" = "Member"
+              )
+ GROUP BY "Customer type";
+
+SELECT Date, Total AS Sales, "Product line"
+FROM hi
+;
